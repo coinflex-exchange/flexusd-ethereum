@@ -12,13 +12,13 @@
 ### Standard Packages ###
 from decimal import Decimal
 ### Third-Party Packages ###
-from pytest import fixture
 from brownie import flexUSD, Proxy
 from brownie.convert import Wei
 from brownie.exceptions import ContractExists
 from brownie.network.contract import ProjectContract
 from brownie.project.main import get_loaded_projects, Project
 from eth_account import Account
+from pytest import fixture
 ### Local Modules ###
 from . import BLUE, NFMT
 from .accounts import *
