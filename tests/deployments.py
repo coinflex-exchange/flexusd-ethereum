@@ -37,10 +37,8 @@ def deploy_proxy(admin: Account, deploy_fusd: flexUSD) -> Proxy:
   print(f'{ BLUE }Event: flexUSD Deployment{ NFMT }')
   fusd: flexUSD = deploy_fusd
   ### Deploy ###
-  print(f'Initialize Signature: { fusd.initialize.signature }')
   total_supply: int = Wei('1000000 ether').to('wei')
   init_bytes: bytes = fusd.initialize.encode_input(total_supply)
-  print(f'Initialize Bytes: { init_bytes }')
   fusd: flexUSD = Proxy.deploy(init_bytes, fusd, {'from': admin})
   return fusd
 
