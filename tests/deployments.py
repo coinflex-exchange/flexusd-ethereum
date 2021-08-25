@@ -11,7 +11,7 @@
 #*************************************************************
 ### Third-Party Packages ###
 from pytest import fixture
-from brownie import flexUSD, Proxy, web3, Wei
+from brownie import flexUSD, Proxy, Wei
 from brownie.exceptions import ContractExists
 from brownie.network.contract import ProjectContract
 from brownie.project.main import get_loaded_projects, Project
