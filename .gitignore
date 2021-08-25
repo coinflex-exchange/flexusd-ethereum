@@ -8,3 +8,6 @@ reports/
 .DS_Store
 # Ignore generated YAML files
 **/*.yml
+# Ignore workspace settings
+.vscode
+.idea
