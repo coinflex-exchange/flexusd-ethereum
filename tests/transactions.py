@@ -40,6 +40,7 @@ def test_transfer_to_users(admin: Account, user_accounts: List[Account], wrap_fl
   assert flex_usd.balanceOf(admin) == (flex_usd.totalSupply() - spent_wei)
 
 def test_transfer_while_broke(user_accounts: List[Account], wrap_flex_proxy: flexUSD):
+  print(f'{ BLUE }Transaction Test #2: Test create failed transaction because balance insufficient.{ NFMT }')
   amount: int          = 100
   amount_wei: Decimal  = Wei(f'{amount} ether').to('wei')
   flex_usd: flexUSD    = wrap_flex_proxy
@@ -57,6 +58,7 @@ def test_transfer_while_broke(user_accounts: List[Account], wrap_flex_proxy: fle
   assert revert_msg == 'VM Exception while processing transaction: revert ERC20: transfer internalAmt exceeds balance'
 
 def test_transfer_hot_potato(admin: Account, user_accounts: List[Account], wrap_flex_proxy: flexUSD):
+  print(f'{ BLUE }Transaction Test #3: Pass the same amount around list of user accounts.{ NFMT }')
   amount: int             = 100
   amount_wei: Decimal     = Wei(f'{amount} ether').to('wei')
   flex_usd: flexUSD       = wrap_flex_proxy
@@ -76,6 +78,7 @@ def test_transfer_hot_potato(admin: Account, user_accounts: List[Account], wrap_
     assert flex_usd.balanceOf(to_addr)   == amount_wei
 
 def test_transfer_while_blacklisted(admin: Account, user_accounts: List[Account], wrap_flex_proxy: flexUSD):
+  print(f'{ BLUE }Transaction Test #4: Transfer amount to account, blacklist it and observe failed transaction due to blacklist.{ NFMT }')
   amount: int         = 100
   amount_wei: Decimal = Wei(f'{amount} ether').to('wei')
   flex_usd: flexUSD   = wrap_flex_proxy
