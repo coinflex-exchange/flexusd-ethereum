@@ -19,7 +19,7 @@ from eth_account import Account
 from pytest import fixture
 from yaml import safe_load
 ### Local Modules ###
-from . import RED, NFMT
+from . import BLUE, GREEN, RED, NFMT
 
 @fixture
 def admin() -> Account:
@@ -47,3 +47,12 @@ def user_accounts() -> List[Account]:
   Use remaining accounts set up by Ganache-cli to be list of user accounts.
   '''
   return accounts[1:10]
+
+def test_show_accounts(admin: Account, user_accounts: List[Account]):
+  print(f'{ BLUE }Account Test #1: Show accounts and assure Accounts have funds.{ NFMT }')
+  starting_fund: Decimal = Wei('100 ether').to('wei')
+  assert admin.balance() == starting_fund
+  print(f'Admin: { admin } { GREEN }(balance={ admin.balance() }){ NFMT }')
+  for i, user_account in enumerate(user_accounts):
+    assert user_account.balance() == starting_fund
+    print(f'User #{i + 1}: { user_account } { GREEN }(balance={ user_account.balance() }){ NFMT }')

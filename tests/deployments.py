@@ -62,3 +62,13 @@ def wrap_flex_proxy(deploy_proxy: Proxy) -> flexUSD:
     build: dict      = { 'abi': flexUSD.abi, 'contractName': 'flexUSD' }
     flex_proxy       = ProjectContract(project, build=build, address=proxy.address)
   return flex_proxy
+
+def test_deployments(deploy_fusd: flexUSD, wrap_flex_proxy: flexUSD):
+  print(f'{ BLUE }Deployment Test #1: Deploy Implementation Logic and then flexUSD.{ NFMT }')
+  fusd: flexUSD       = deploy_fusd
+  flex_proxy: flexUSD = wrap_flex_proxy
+  ### Display Shared Logic and Separate Storage ###
+  print(f'Implementation V0: { fusd } (totalSupply={ fusd.totalSupply() }, admin={ fusd.admin() })')
+  print(f'flexUSD: { flex_proxy } (totalSupply={ flex_proxy.totalSupply()}, admin={ flex_proxy.admin() })')
+  assert fusd.totalSupply() != flex_proxy.totalSupply() # Storage is not shared, logic is;
+  assert fusd.admin()       == flex_proxy.admin()       # Initialized by the same key
