@@ -70,4 +70,4 @@ def main():
   ### Deployments ###
   limit             = flexUSD.deploy.estimate_gas({ 'from': acct }) * gas_price
   flex_usd: flexUSD = flexUSD.deploy({ 'from': acct, 'gas_limit': limit })
-  print(f'FlexUSD Logic Contract: { flex_usd }')
+  print(f'flexUSD Logic Contract: { flex_usd }')

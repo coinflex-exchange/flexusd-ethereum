@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "flexusd-ethereum"
 version = "0.1.0"
-description = "Collection of FlexUSD deployments on Ethereum Mainnet"
+description = "Collection of flexUSD deployments on Ethereum Mainnet"
 authors = ["Sitt Guruvanich <aekasitt@gmail.com>"]
 
 [tool.poetry.dependencies]
