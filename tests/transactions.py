@@ -10,9 +10,11 @@
 # HISTORY:
 #*************************************************************
 ### Standard Packages ###
+from decimal import Decimal
 from typing import List
 ### Third-Party Packages ###
-from brownie.network.account import Account
+from brownie import flexUSD
+from eth_account import Account
 ### Local Modules ###
 from . import *
 from .accounts import *
@@ -20,7 +22,7 @@ from .deployments import *
 
 def test_show_accounts(admin: Account, user_accounts: List[Account]):
   print(f'{ BLUE }Test #1 Show accounts and assure Accounts have funds.{ NFMT }')
-  starting_fund: int = Wei('100 ether').to('wei')
+  starting_fund: Decimal = Wei('100 ether').to('wei')
   assert admin.balance() == starting_fund
   print(f'Admin: { admin } { GREEN }(balance={ admin.balance() }){ NFMT }')
   for i, user_account in enumerate(user_accounts):
@@ -42,13 +44,13 @@ def test_transfer_to_users(admin: Account, user_accounts: List[Account], wrap_fl
   amount: int       = 100
   flex_usd: flexUSD = wrap_flex_proxy
   for i, user_account in enumerate(user_accounts):
-    amount_wei: int = Wei(f'{amount} ether').to('wei')
+    amount_wei: Decimal = Wei(f'{amount} ether').to('wei')
     txn = flex_usd.transfer(user_account, amount_wei, {'from': admin})
     print(f'Transaction #{i + 1}: ' \
       f'(from={ admin.address[:20] }..., ' \
         f'to={ user_account.address[:20] }..., ' \
           f'amount={ amount }, id={ txn.txid[:20] }... ' \
         ')')
-  spent: int     = len(user_accounts) * amount
-  spent_wei: int = Wei(f'{spent} ether').to('wei')
+  spent: int         = len(user_accounts) * amount
+  spent_wei: Decimal = Wei(f'{spent} ether').to('wei')
   assert flex_usd.balanceOf(admin) == (flex_usd.totalSupply() - spent_wei)

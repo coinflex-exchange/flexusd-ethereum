@@ -10,14 +10,16 @@
 # HISTORY:
 #*************************************************************
 ### Standard Packages ###
+from decimal import Decimal
 from typing import List
 ### Third-Party Packages ###
-from brownie import accounts, Wei
-from brownie.network.account import Account
+from brownie.convert import Wei
+from brownie.network import accounts
+from eth_account import Account
 from pytest import fixture
 from yaml import safe_load
 ### Local Modules ###
-from . import *
+from . import RED, NFMT
 
 @fixture
 def admin() -> Account:
@@ -34,7 +36,8 @@ def admin() -> Account:
     return
   ### Transfer Initial Balance to Test WAllet ###
   try:
-    accounts[0].transfer(acct, Wei('100 ether').to('wei'))
+    fund: Decimal = Wei('100 ether').to('wei')
+    accounts[0].transfer(acct, fund)
   except ValueError: pass
   return acct
 

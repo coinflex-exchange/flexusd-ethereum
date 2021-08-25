@@ -9,14 +9,18 @@
 #
 # HISTORY:
 #*************************************************************
+### Standard Packages ###
+from decimal import Decimal
 ### Third-Party Packages ###
 from pytest import fixture
-from brownie import flexUSD, Proxy, Wei
+from brownie import flexUSD, Proxy
+from brownie.convert import Wei
 from brownie.exceptions import ContractExists
 from brownie.network.contract import ProjectContract
 from brownie.project.main import get_loaded_projects, Project
+from eth_account import Account
 ### Local Modules ###
-from . import *
+from . import BLUE, NFMT
 from .accounts import *
 
 @fixture
@@ -26,8 +30,8 @@ def deploy_fusd(admin: Account) -> flexUSD:
   '''
   print(f'{ BLUE }Event: flexUSD Implementation Logic V0 Deployment{ NFMT }')
   ### Deploy ###
-  fusd: flexUSD     = flexUSD.deploy({'from': admin})
-  total_supply: int = Wei('0 ether').to('wei')
+  fusd: flexUSD         = flexUSD.deploy({'from': admin})
+  total_supply: Decimal = Wei('0 ether').to('wei')
   ### Initialize ###
   fusd.initialize(total_supply, {'from': admin})
   return fusd
@@ -37,8 +41,8 @@ def deploy_proxy(admin: Account, deploy_fusd: flexUSD) -> Proxy:
   print(f'{ BLUE }Event: flexUSD Deployment{ NFMT }')
   fusd: flexUSD = deploy_fusd
   ### Deploy ###
-  total_supply: int = Wei('1000000 ether').to('wei')
-  init_bytes: bytes = fusd.initialize.encode_input(total_supply)
+  total_supply: Decimal = Wei('1000000 ether').to('wei')
+  init_bytes: bytes     = fusd.initialize.encode_input(total_supply)
   fusd: flexUSD = Proxy.deploy(init_bytes, fusd, {'from': admin})
   return fusd
 
