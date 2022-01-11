@@ -42,31 +42,13 @@ def main():
   
   # update proxy
   print(f'\t{ TERM_GREEN }FlexUSD Proxy Update logic{ TERM_NFMT }')
-  proxy_address = '0xF201327da0698696b9C1362Ff8091eD869eC95d1'
+  if chain.id == 3:
+    proxy_address = '0xF201327da0698696b9C1362Ff8091eD869eC95d1'
+  elif chain.id == 42:
+    proxy_address = '0x0A327833232Ec4c88DbFa0ae6E44b31D6956088e'
+  else:
+    print(f'{TERM_RED}Proxy is not deployed yet on current chain{TERM_NFMT}')
+    return
   proxy = Contract.from_abi('Proxy', proxy_address, FlexUSDV2.abi)
   proxy.updateCode(fusd, {'from': acct, 'gas_price': gas_price})
   print(f'\tUpdate successful!\n')
-
-# Running 'scripts/upgrade.py::main'...
-#         Network Chain-ID: <Chain object (chainid=3, height=11788435)>
-#         Account Address:  0x945e9704D2735b420363071bB935ACf2B9C4b814
-#         Account Balance:  1697893782406130262
-
-#         FlexUSD Implementation Logic V2 Deployment
-# Transaction sent: 0x5c4d64c5ab90ffe046109bdb71b5aa46a7ef0591f5c0aa0d8dd50c24af3165aa
-#   Gas price: 2.0 gwei   Gas limit: 2044227   Nonce: 47
-#   FlexUSDV2.constructor confirmed   Block: 11788437   Gas used: 1858389 (90.91%)
-#   FlexUSDV2 deployed at: 0xCA733eA3F85683A11Ebf03cfe350787a79e644CA
-
-# Waiting for https://api-ropsten.etherscan.io/api to process contract...
-# Verification submitted successfully. Waiting for result...
-# Verification pending...
-# Verification complete. Result: Pass - Verified
-#         Deployed successful!
-
-#         FlexUSD Proxy Update logic
-# Transaction sent: 0xee587196384fd477f2ef58baf0047215632c7d473e10054ca4ba27cbc24adc08
-#   Gas price: 2.0 gwei   Gas limit: 50025   Nonce: 48
-#   Transaction confirmed   Block: 11788441   Gas used: 38128 (76.22%)
-
-#         Update successful!
