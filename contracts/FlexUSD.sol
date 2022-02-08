@@ -84,16 +84,16 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   override
   view
   returns(uint256) {
-    uint256 internalAmt;
+    uint256 externalAmt;
     uint256 maxapproval = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
     maxapproval = maxapproval.div(multiplier).mul(DECI);
     if (_allowances[owner][spender] > maxapproval) {
-      internalAmt = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
+      externalAmt = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
     } else {
-      internalAmt = (_allowances[owner][spender]).mul(multiplier).div(DECI);
+      externalAmt = (_allowances[owner][spender]).mul(multiplier).div(DECI);
     }
 
-    return internalAmt;
+    return externalAmt;
   }
 
   function approve(address spender, uint256 amount)
@@ -215,7 +215,6 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     uint256 externalAmt
   ) internal virtual {
     require(account != address(0), "ERC20: mint to the zero address");
-
     _totalSupply = _totalSupply.add(internalAmt);
     _balances[account] = _balances[account].add(internalAmt);
     emit Transfer(address(0), account, externalAmt);
@@ -230,7 +229,6 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     uint256 internalAmt;
     uint256 externalAmt = amount;
     internalAmt = externalAmt.mul(DECI).div(multiplier);
-
     _burn(burnFrom, internalAmt, externalAmt);
     return true;
   }
