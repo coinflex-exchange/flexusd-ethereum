@@ -84,7 +84,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     uint256 externalAmt;
     uint256 maxapproval = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
     maxapproval = maxapproval.div(multiplier).mul(DECI);
-    if (_allowances[owner][spender] > maxapproval) {
+    if (_allowances[owner][spender] >= maxapproval) {
       externalAmt = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
     } else {
       externalAmt = (_allowances[owner][spender]).mul(multiplier).div(DECI);
