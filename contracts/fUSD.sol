@@ -2,15 +2,14 @@
 pragma solidity ^0.6.0;
 
 import './Context.sol';
-import './fUSDStorage.sol';
+import './FlexUSDStorage.sol';
 import './LibraryLock.sol';
 import './Proxiable.sol';
 import './SafeMath.sol';
 import '../interfaces/IERC20.sol';
 
-contract flexUSD is fUSDStorage, Context, IERC20, Proxiable, LibraryLock {
-  using SafeMath
-  for uint256;
+contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
+  using SafeMath for uint256;
 
   event fTokenBlacklist(address indexed account, bool blocked);
   event ChangeMultiplier(uint256 multiplier);
