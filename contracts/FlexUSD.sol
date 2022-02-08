@@ -66,8 +66,8 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   public
   virtual
   override
-  Notblacklist(msg.sender)
-  Notblacklist(recipient)
+  notblacklisted(msg.sender)
+  notblacklisted(recipient)
   ispaused()
   returns(bool) {
     uint256 internalAmt;
@@ -100,8 +100,8 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   public
   virtual
   override
-  Notblacklist(spender)
-  Notblacklist(msg.sender)
+  notblacklisted(spender)
+  notblacklisted(msg.sender)
   ispaused()
   returns(bool) {
     uint256 internalAmt;
@@ -123,8 +123,8 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
    * - `spender` cannot be the zero address.
    */
   function increaseAllowance(address spender, uint256 addedValue) public
-  Notblacklist(spender)
-  Notblacklist(msg.sender)
+  notblacklisted(spender)
+  notblacklisted(msg.sender)
   ispaused()
   returns(bool) {
     uint256 externalAmt = allowance(_msgSender(), spender);
@@ -147,8 +147,8 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
    * `subtractedValue`.
    */
   function decreaseAllowance(address spender, uint256 subtractedValue) public
-  Notblacklist(spender)
-  Notblacklist(msg.sender)
+  notblacklisted(spender)
+  notblacklisted(msg.sender)
   ispaused()
   returns(bool) {
     uint256 externalAmt = allowance(_msgSender(), spender);
@@ -164,9 +164,9 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   public
   virtual
   override
-  Notblacklist(sender)
-  Notblacklist(msg.sender)
-  Notblacklist(recipient)
+  notblacklisted(sender)
+  notblacklisted(msg.sender)
+  notblacklisted(recipient)
   ispaused()
   returns(bool) {
     uint256 externalAmt = allowance(sender, _msgSender());
@@ -307,7 +307,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     emit TokenBlacklist(account, false);
   }
 
-  modifier Notblacklist(address account) {
+  modifier notBlacklisted(address account) {
     require(!blacklist[account], "account is blacklisted");
     _;
   }
