@@ -34,7 +34,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   function setMultiplier(uint256 _multiplier)
   external
   onlyAdmin()
-  ispaused() {
+  isPaused() {
     require(
       _multiplier > multiplier,
       "the multiplier should be greater than previous multiplier"
@@ -68,7 +68,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   override
   notblacklisted(msg.sender)
   notblacklisted(recipient)
-  ispaused()
+  isPaused()
   returns(bool) {
     uint256 internalAmt;
     uint256 externalAmt = amount;
@@ -102,7 +102,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   override
   notblacklisted(spender)
   notblacklisted(msg.sender)
-  ispaused()
+  isPaused()
   returns(bool) {
     uint256 internalAmt;
     uint256 externalAmt = amount;
@@ -125,7 +125,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   function increaseAllowance(address spender, uint256 addedValue) public
   notblacklisted(spender)
   notblacklisted(msg.sender)
-  ispaused()
+  isPaused()
   returns(bool) {
     uint256 externalAmt = allowance(_msgSender(), spender);
     _approve(_msgSender(), spender, externalAmt.add(addedValue));
@@ -149,7 +149,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   function decreaseAllowance(address spender, uint256 subtractedValue) public
   notblacklisted(spender)
   notblacklisted(msg.sender)
-  ispaused()
+  isPaused()
   returns(bool) {
     uint256 externalAmt = allowance(_msgSender(), spender);
     _approve(_msgSender(), spender, externalAmt.sub(subtractedValue, "ERC20: decreased allowance below zero"));
@@ -167,7 +167,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   notblacklisted(sender)
   notblacklisted(msg.sender)
   notblacklisted(recipient)
-  ispaused()
+  isPaused()
   returns(bool) {
     uint256 externalAmt = allowance(sender, _msgSender());
     _transfer(sender, recipient, amount);
@@ -202,7 +202,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   public
   virtual
   onlyAdmin()
-  ispaused()
+  isPaused()
   returns(bool) {
     uint256 externalAmt = amount;
     uint256 internalAmt = externalAmt.mul(DECI).div(multiplier);
@@ -226,7 +226,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   public
   virtual
   onlyAdmin()
-  ispaused()
+  isPaused()
   returns(bool) {
     uint256 internalAmt;
     uint256 externalAmt = amount;
@@ -287,8 +287,8 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
 
   // pause unpause
 
-  modifier ispaused() {
-    require(getpause == false, "the contract is paused");
+  modifier isPaused() {
+    require(!getpause, "the contract is paused");
     _;
   }
 
@@ -296,7 +296,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     require(msg.sender == admin, "you are not the admin");
     _;
   }
-
+  
   function addToBlacklist(address account) external onlyAdmin() {
     blacklist[account] = true;
     emit TokenBlacklist(account, true);
