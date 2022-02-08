@@ -5,7 +5,7 @@ description = "Collection of flexUSD deployments on Ethereum Mainnet"
 authors = ["Sitt Guruvanich <aekasitt@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "3.7.10"
+python = "^3.7.10"
 eth-brownie = "^1.16.1"
 
 [tool.poetry.dev-dependencies]
