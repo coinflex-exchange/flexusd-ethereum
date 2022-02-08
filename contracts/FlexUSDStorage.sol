@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
-contract flexUSDStorage {
+contract FlexUSDStorage {
   /** WARNING: NEVER RE-ORDER VARIABLES! 
    *  Always double-check that new variables are added APPEND-ONLY.
    *  Re-ordering variables can permanently BREAK the deployed proxy contract.
