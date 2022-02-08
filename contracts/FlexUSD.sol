@@ -70,10 +70,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   notBlacklisted(recipient)
   isPaused()
   returns(bool) {
-    uint256 internalAmt;
     uint256 externalAmt = amount;
-    internalAmt = (amount.mul(DECI)).div(multiplier);
-
     _transfer(msg.sender, recipient, externalAmt);
     return true;
   }
