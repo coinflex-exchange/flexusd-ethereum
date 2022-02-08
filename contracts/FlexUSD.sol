@@ -66,8 +66,8 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   public
   virtual
   override
-  notblacklisted(msg.sender)
-  notblacklisted(recipient)
+  notBlacklisted(msg.sender)
+  notBlacklisted(recipient)
   isPaused()
   returns(bool) {
     uint256 internalAmt;
@@ -100,11 +100,10 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   public
   virtual
   override
-  notblacklisted(spender)
-  notblacklisted(msg.sender)
+  notBlacklisted(spender)
+  notBlacklisted(msg.sender)
   isPaused()
   returns(bool) {
-    uint256 internalAmt;
     uint256 externalAmt = amount;
     _approve(msg.sender, spender, externalAmt);
     return true;
@@ -123,8 +122,8 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
    * - `spender` cannot be the zero address.
    */
   function increaseAllowance(address spender, uint256 addedValue) public
-  notblacklisted(spender)
-  notblacklisted(msg.sender)
+  notBlacklisted(spender)
+  notBlacklisted(msg.sender)
   isPaused()
   returns(bool) {
     uint256 externalAmt = allowance(_msgSender(), spender);
@@ -147,8 +146,8 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
    * `subtractedValue`.
    */
   function decreaseAllowance(address spender, uint256 subtractedValue) public
-  notblacklisted(spender)
-  notblacklisted(msg.sender)
+  notBlacklisted(spender)
+  notBlacklisted(msg.sender)
   isPaused()
   returns(bool) {
     uint256 externalAmt = allowance(_msgSender(), spender);
@@ -164,9 +163,9 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   public
   virtual
   override
-  notblacklisted(sender)
-  notblacklisted(msg.sender)
-  notblacklisted(recipient)
+  notBlacklisted(sender)
+  notBlacklisted(msg.sender)
+  notBlacklisted(recipient)
   isPaused()
   returns(bool) {
     uint256 externalAmt = allowance(sender, _msgSender());
@@ -259,12 +258,17 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     require(owner != address(0), "ERC20: approve from the zero address");
     require(spender != address(0), "ERC20: approve to the zero address");
     uint256 internalAmt;
-    uint256 maxapproval = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
-    maxapproval = maxapproval.div(multiplier).mul(DECI);
-    if (externalAmt > maxapproval) {
-      internalAmt = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
-    } else {
+    uint256 max_uint = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
+    uint256 maxapproval = max_uint.div(multiplier).mul(DECI);
+    if (externalAmt <= max_uint.div(DECI))
+    {
       internalAmt = externalAmt.mul(DECI).div(multiplier);
+      if (internalAmt > maxapproval)
+      {
+        internalAmt = maxapproval;
+      }
+    } else {
+      internalAmt = maxapproval;
     }
     _allowances[owner][spender] = internalAmt;
     emit Approval(owner, spender, externalAmt);
