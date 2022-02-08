@@ -297,12 +297,12 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     _;
   }
 
-  function AddToBlacklist(address account) external onlyAdmin() {
+  function addToBlacklist(address account) external onlyAdmin() {
     blacklist[account] = true;
     emit TokenBlacklist(account, true);
   }
 
-  function RemoveFromBlacklist(address account) external onlyAdmin() {
+  function removeFromBlacklist(address account) external onlyAdmin() {
     blacklist[account] = false;
     emit TokenBlacklist(account, false);
   }
