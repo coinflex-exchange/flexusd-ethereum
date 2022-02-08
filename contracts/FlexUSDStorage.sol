@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
-contract fUSDStorage {
+contract flexUSDStorage {
   /** WARNING: NEVER RE-ORDER VARIABLES! 
    *  Always double-check that new variables are added APPEND-ONLY.
    *  Re-ordering variables can permanently BREAK the deployed proxy contract.
@@ -22,7 +22,7 @@ contract fUSDStorage {
   uint256 public multiplier;
   uint8 public constant decimals = 18;
   address public admin;
-  uint256 internal constant deci = 1e18;
+  uint256 internal constant DECI = 1e18;
 
   bool internal getpause;
 }
