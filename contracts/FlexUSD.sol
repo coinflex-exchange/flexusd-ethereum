@@ -270,9 +270,8 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     emit Approval(owner, spender, externalAmt);
   }
 
-  function TransferOwnerShip(address account) public onlyAdmin() {
-    require(account != address(0), "account cannot be zero address");
-    require(msg.sender == admin, "you are not the admin");
+  function transferOwnership(address account) public onlyAdmin() {
+    require(account != address(0), "new owner account cannot be zero address");
     admin = account;
     emit AdminChanged(admin);
   }
