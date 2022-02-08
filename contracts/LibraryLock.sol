@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
-import './fUSDStorage.sol';
+import './FlexUSDStorage.sol';
 
-contract LibraryLock is fUSDStorage {
+contract LibraryLock is FlexUSDStorage {
   // Ensures no one can manipulate the Logic Contract once it is deployed.	
   // PARITY WALLET HACK PREVENTION	
 
