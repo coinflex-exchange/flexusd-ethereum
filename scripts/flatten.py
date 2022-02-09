@@ -12,8 +12,8 @@
 '''
 Flatten two of the main contracts under contracts/ directory to flattened/ directory
 '''
-from brownie import flexUSD
+from brownie import FlexUSD
 
 def main():
-  with open('./flattened/fUSD.sol', 'wb') as f:
-    f.write(flexUSD.get_verification_info()['flattened_source'].encode('utf-8'))
+  with open('./flattened/FlexUSD.sol', 'wb') as f:
+    f.write(FlexUSD.get_verification_info()['flattened_source'].encode('utf-8'))
