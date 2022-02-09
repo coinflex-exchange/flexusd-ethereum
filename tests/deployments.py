@@ -12,7 +12,7 @@
 ### Standard Packages ###
 from decimal import Decimal
 ### Third-Party Packages ###
-from brownie import flexUSD, Proxy, FlexUSDV2
+from brownie import FlexUSD, Proxy, FlexUSDV2
 from brownie.convert import Wei
 from brownie.exceptions import ContractExists
 from brownie.network.contract import ProjectContract
@@ -74,12 +74,12 @@ def test_deployments(deploy_fusd: FlexUSD, wrap_flex_proxy: FlexUSD):
   assert fusd.totalSupply() != flex_proxy.totalSupply() # Storage is not shared, logic is;
   assert fusd.admin()       == flex_proxy.admin()       # Initialized by the same key
 
-def test_storage(deploy_fusd: flexUSD, wrap_flex_proxy: flexUSD, admin: Account, user_accounts: List[Account]):
+def test_storage(deploy_fusd: FlexUSD, wrap_flex_proxy: FlexUSD, admin: Account, user_accounts: List[Account]):
   alice: Account = user_accounts[0]
   bob: Account = user_accounts[1]
   print(f'{ BLUE }Deployment Test #2: Logic storage is different from proxy storage{ NFMT }')
-  fusd: flexUSD       = deploy_fusd
-  flex_proxy: flexUSD = wrap_flex_proxy
+  fusd: FlexUSD       = deploy_fusd
+  flex_proxy: FlexUSD = wrap_flex_proxy
   fusd.mint(alice, 1000, {'from': admin})
   flex_proxy.mint(bob, 2000, {'from': admin})
   fusd.balanceOf(alice) != flex_proxy.balanceOf(alice)

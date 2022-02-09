@@ -1,4 +1,4 @@
-from brownie import FlexUSDV2, Proxy
+from brownie import FlexUSD, Proxy
 from brownie.network import Chain, accounts
 from brownie.network.contract import Contract
 from brownie.convert import Wei
@@ -13,7 +13,7 @@ TERM_GREEN = '\033[1;32m'
 def main():
   chain = Chain()
   print(f'\t{TERM_GREEN}Network Chain-ID: { chain }{TERM_NFMT}')
-  if chain.id not in [1,3,4,5,42]:
+  if chain.id not in [1, 3, 4, 5, 42]:
     return print(f'\t{TERM_RED}The Network is not supported by the script{TERM_NFMT}')
 
   ## load account
@@ -37,7 +37,7 @@ def main():
 
   # deploy flexUSD
   print(f'\t{ TERM_GREEN }FlexUSD Implementation Logic V2 Deployment{ TERM_NFMT }')
-  fusd = FlexUSDV2.deploy({'from': acct, 'gas_price': gas_price}, publish_source=True)
+  fusd: FlexUSD = FlexUSD.deploy({'from': acct, 'gas_price': gas_price}, publish_source=True)
   print(f'\tDeployed successful!\n')
   
   # update proxy
@@ -49,6 +49,6 @@ def main():
   else:
     print(f'{TERM_RED}Proxy is not deployed yet on current chain{TERM_NFMT}')
     return
-  proxy = Contract.from_abi('Proxy', proxy_address, FlexUSDV2.abi)
+  proxy: Proxy = Contract.from_abi('Proxy', proxy_address, FlexUSD.abi)
   proxy.updateCode(fusd, {'from': acct, 'gas_price': gas_price})
   print(f'\tUpdate successful!\n')

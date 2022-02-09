@@ -25,11 +25,14 @@ def main():
   print(f'Network Chain-ID: { chain }')
   chain_map = {
     1: None,              # mainnet
+    3: 'ropsten',         # repsten testnet
+    4: 'rinkeby',         # rinkeby testnet
+    5: 'goerli',          # goerli testnet
     42: 'kovan',          # kovan testnet
     1337: 'dev',          # local ganache-cli evm
     10001: 'smartbch-t1a' # smartbch testnet
   }
-  if chain._chainid in (1, 3,4,5,42, 1337, 10001):
+  if chain._chainid in (1, 3, 4, 5, 42, 1337, 10001):
     chain_name = chain_map[chain._chainid]
     file_name = 'wallet.yml' if chain_name is None else f'wallet.{chain_name}.yml'
     ### Load Mnemonic from YAML File ###
@@ -75,5 +78,5 @@ def main():
   print(f'\t{ TERM_GREEN }FlexUSD Proxy Deployment{ TERM_NFMT }')
   total_supply = Wei('1000000 ether').to('wei')
   init_bytes = flex_usd.initialize.encode_input(total_supply)
-  proxy: Proxy=Proxy.deploy(init_bytes, flex_usd, {'from': acct, 'gas_price': gas_price}, publish_source=True)
+  proxy: Proxy = Proxy.deploy(init_bytes, flex_usd, {'from': acct, 'gas_price': gas_price}, publish_source=True)
   print(f'\t Proxy Deployed successfullly at {proxy} !\n')
