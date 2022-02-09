@@ -13,7 +13,7 @@
 from decimal import Decimal
 from typing import List
 ### Third-Party Packages ###
-from brownie import flexUSD
+from brownie import FlexUSD
 from brownie.convert import Wei
 from brownie.exceptions import VirtualMachineError
 from brownie.network.transaction import TransactionReceipt
@@ -23,10 +23,10 @@ from . import *
 from .accounts import *
 from .deployments import *
 
-def test_transfer_to_users(admin: Account, user_accounts: List[Account], wrap_flex_proxy: flexUSD):
+def test_transfer_to_users(admin: Account, user_accounts: List[Account], wrap_flex_proxy: FlexUSD):
   print(f'{ BLUE }Transaction Test #1: Distribute 100 each to user accounts.{ NFMT }')
   amount: int       = 100
-  flex_usd: flexUSD = wrap_flex_proxy
+  flex_usd: FlexUSD = wrap_flex_proxy
   for i, user_account in enumerate(user_accounts):
     amount_wei: Decimal = Wei(f'{amount} ether').to('wei')
     txn = flex_usd.transfer(user_account, amount_wei, {'from': admin})
@@ -39,11 +39,11 @@ def test_transfer_to_users(admin: Account, user_accounts: List[Account], wrap_fl
   spent_wei: Decimal = Wei(f'{spent} ether').to('wei')
   assert flex_usd.balanceOf(admin) == (flex_usd.totalSupply() - spent_wei)
 
-def test_transfer_while_broke(user_accounts: List[Account], wrap_flex_proxy: flexUSD):
+def test_transfer_while_broke(user_accounts: List[Account], wrap_flex_proxy: FlexUSD):
   print(f'{ BLUE }Transaction Test #2: Test create failed transaction because balance insufficient.{ NFMT }')
   amount: int          = 100
   amount_wei: Decimal  = Wei(f'{amount} ether').to('wei')
-  flex_usd: flexUSD    = wrap_flex_proxy
+  flex_usd: FlexUSD    = wrap_flex_proxy
   test_acct: Account   = user_accounts[0]
   target_acct: Account = user_accounts[1]
   revert: bool         = False
@@ -57,11 +57,11 @@ def test_transfer_while_broke(user_accounts: List[Account], wrap_flex_proxy: fle
   print(revert_msg)
   assert revert_msg == 'VM Exception while processing transaction: revert ERC20: transfer internalAmt exceeds balance'
 
-def test_transfer_hot_potato(admin: Account, user_accounts: List[Account], wrap_flex_proxy: flexUSD):
+def test_transfer_hot_potato(admin: Account, user_accounts: List[Account], wrap_flex_proxy: FlexUSD):
   print(f'{ BLUE }Transaction Test #3: Pass the same amount around list of user accounts.{ NFMT }')
   amount: int             = 100
   amount_wei: Decimal     = Wei(f'{amount} ether').to('wei')
-  flex_usd: flexUSD       = wrap_flex_proxy
+  flex_usd: FlexUSD       = wrap_flex_proxy
   ### First Transfer from Admin ###
   txn: TransactionReceipt = flex_usd.transfer(user_accounts[0], amount_wei, { 'from': admin })
   print(f'<Transaction (amount={amount}, txid={txn.txid[:15]}..., from={admin.address[:15]}..., to={user_accounts[0].address[:15]}...)>')

@@ -12,7 +12,7 @@
 ### Standard Packages ###
 from decimal import Decimal
 ### Third-Party Packages ###
-from brownie import flexUSD, Proxy
+from brownie import FlexUSD, Proxy
 from brownie.convert import Wei
 from brownie.exceptions import ContractExists
 from brownie.network.contract import ProjectContract
@@ -24,49 +24,49 @@ from . import BLUE, NFMT
 from .accounts import *
 
 @fixture
-def deploy_fusd(admin: Account) -> flexUSD:
+def deploy_fusd(admin: Account) -> FlexUSD:
   '''
   Deploy and Inititialize Implementation Logic Contract with totalSupply of 0.
   '''
   print(f'{ BLUE }Event: flexUSD Implementation Logic V0 Deployment{ NFMT }')
   ### Deploy ###
-  fusd: flexUSD         = flexUSD.deploy({'from': admin})
+  fusd: FlexUSD         = FlexUSD.deploy({'from': admin})
   total_supply: Decimal = Wei('0 ether').to('wei')
   ### Initialize ###
   fusd.initialize(total_supply, {'from': admin})
   return fusd
 
 @fixture
-def deploy_proxy(admin: Account, deploy_fusd: flexUSD) -> Proxy:
+def deploy_proxy(admin: Account, deploy_fusd: FlexUSD) -> Proxy:
   print(f'{ BLUE }Event: flexUSD Deployment{ NFMT }')
-  fusd: flexUSD = deploy_fusd
+  fusd: FlexUSD = deploy_fusd
   ### Deploy ###
   total_supply: Decimal = Wei('1000000 ether').to('wei')
   init_bytes: bytes     = fusd.initialize.encode_input(total_supply)
-  fusd: flexUSD = Proxy.deploy(init_bytes, fusd, {'from': admin})
+  fusd: FlexUSD = Proxy.deploy(init_bytes, fusd, {'from': admin})
   return fusd
 
 @fixture
-def wrap_flex_proxy(deploy_proxy: Proxy) -> flexUSD:
+def wrap_flex_proxy(deploy_proxy: Proxy) -> FlexUSD:
   '''
   Wrapping flexUSD address with flexUSDImplV0 Container and Initialize with totalSupply of 1,000,000 
   '''
   print(f'{ BLUE }Event: Wrapping flexUSD with Impl V0{ NFMT }')
   proxy: Proxy = deploy_proxy
   ### Wrap ###
-  flex_proxy: flexUSD
+  flex_proxy: FlexUSD
   try:
-    flex_proxy = flexUSD.at(proxy.address)
+    flex_proxy = FlexUSD.at(proxy.address)
   except ContractExists:
     project: Project = get_loaded_projects()[0]
-    build: dict      = { 'abi': flexUSD.abi, 'contractName': 'flexUSD' }
+    build: dict      = { 'abi': FlexUSD.abi, 'contractName': 'FlexUSD' }
     flex_proxy       = ProjectContract(project, build=build, address=proxy.address)
   return flex_proxy
 
-def test_deployments(deploy_fusd: flexUSD, wrap_flex_proxy: flexUSD):
+def test_deployments(deploy_fusd: FlexUSD, wrap_flex_proxy: FlexUSD):
   print(f'{ BLUE }Deployment Test #1: Deploy Implementation Logic and then flexUSD.{ NFMT }')
-  fusd: flexUSD       = deploy_fusd
-  flex_proxy: flexUSD = wrap_flex_proxy
+  fusd: FlexUSD       = deploy_fusd
+  flex_proxy: FlexUSD = wrap_flex_proxy
   ### Display Shared Logic and Separate Storage ###
   print(f'Implementation V0: { fusd } (totalSupply={ fusd.totalSupply() }, admin={ fusd.admin() })')
   print(f'flexUSD: { flex_proxy } (totalSupply={ flex_proxy.totalSupply()}, admin={ flex_proxy.admin() })')
