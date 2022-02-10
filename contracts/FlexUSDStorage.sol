@@ -24,5 +24,5 @@ contract FlexUSDStorage {
   address public admin;
   uint256 internal constant DECI = 1e18;
 
-  bool internal getpause;
+  bool internal getPause;
 }

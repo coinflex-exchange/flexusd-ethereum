@@ -276,17 +276,17 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   }
 
   function pause() external onlyAdmin() {
-    getpause = true;
+    getPause = true;
   }
 
   function unpause() external onlyAdmin() {
-    getpause = false;
+    getPause = false;
   }
 
   // pause unpause
 
   modifier isPaused() {
-    require(!getpause, "the contract is paused");
+    require(!getPause, "the contract is paused");
     _;
   }
 
