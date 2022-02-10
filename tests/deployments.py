@@ -12,7 +12,7 @@
 ### Standard Packages ###
 from decimal import Decimal
 ### Third-Party Packages ###
-from brownie import FlexUSD, Proxy, FlexUSDV2
+from brownie import FlexUSD, Proxy, FlexUSDV2, reverts
 from brownie.convert import Wei
 from brownie.exceptions import ContractExists
 from brownie.network.contract import ProjectContract
@@ -85,9 +85,44 @@ def test_storage(deploy_fusd: FlexUSD, wrap_flex_proxy: FlexUSD, admin: Account,
   fusd.balanceOf(alice) != flex_proxy.balanceOf(alice)
   fusd.balanceOf(bob) != flex_proxy.balanceOf(bob)
 
-def test_upgrade(deploy_proxy: Proxy, admin: Account, user_accounts: List[Account]):
+def test_upgrade_to_zero(wrap_flex_proxy: FlexUSD, admin: Account):
+  print(f'{ BLUE }Upgrade Test #1: Upgrade to zero address{ NFMT }')
+  ### Prepare Parameters ###
+  target: str = '0x0000000000000000000000000000000000000000'
+  flex_proxy: FlexUSD   = wrap_flex_proxy
+  ### Upgrade ###
+  with reverts():
+    flex_proxy.updateCode(target, {'from': admin})
+
+def test_upgrade_to_eoa(wrap_flex_proxy: FlexUSD, admin: Account, user_accounts: List[Account]):
+  print(f'{ BLUE }Upgrade Test #2: Upgrade to EOA{ NFMT }')
+  ### Prepare Parameters ###
+  target: str = user_accounts[1]
+  flex_proxy: FlexUSD   = wrap_flex_proxy
+  ### Upgrade ###
+  with reverts():
+    flex_proxy.updateCode(target, {'from': admin})
+
+def test_upgrade_to_same_impl(wrap_flex_proxy: FlexUSD, deploy_fusd: FlexUSD, admin: Account, user_accounts: List[Account]):
+  print(f'{ BLUE }Upgrade Test #3: Upgrade to the same logic{ NFMT }')
+  flex_proxy: FlexUSD   = wrap_flex_proxy
+  fusd: FlexUSD         = deploy_fusd
+
+  flex_proxy.updateCode(fusd, {'from': admin})
+
+def test_upgrade_from_non_owner(wrap_flex_proxy: FlexUSD, deploy_fusd: FlexUSD, user_accounts: List[Account]):
+  print(f'{ BLUE }Upgrade Test #4: Upgrade from a Non-Owner Account{ NFMT }')
+  ### Prepare Parameters ###
+  non_admin: str = user_accounts[1]
+  flex_proxy: FlexUSD   = wrap_flex_proxy
+  fusd: FlexUSD         = deploy_fusd
+  ### Upgrade ###
+  with reverts("you are not the admin"):
+    flex_proxy.updateCode(fusd, {'from': non_admin})
+
+def test_upgrade_successful_to_v2(deploy_proxy: Proxy, admin: Account, user_accounts: List[Account]):
   alice: Account = user_accounts[0]
-  print(f'{ BLUE }Deployment Test #3: Upgrade logic and keep the proxy data{ NFMT }')
+  print(f'{ BLUE }Upgrade Test #5: Upgrade logic and keep the proxy data{ NFMT }')
   # deploy new logic
   fusd_v2: FlexUSDV2 = FlexUSDV2.deploy({'from': admin})
   # get new wrapper of proxy (upgrade abi)
