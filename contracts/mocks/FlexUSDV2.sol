@@ -47,12 +47,12 @@ contract FlexUSDV2 is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     return _totalSupply.mul(multiplier).div(DECI);
   }
 
-  function setTotalSupply(uint256 inputTotalsupply) external onlyAdmin() {
+  function setTotalSupply(uint256 inputTotalSupply) external onlyAdmin() {
     require(
-      inputTotalsupply > totalSupply(),
+      inputTotalSupply > totalSupply(),
       "the input total supply is not greater than present total supply"
     );
-    multiplier = (inputTotalsupply.mul(DECI)).div(_totalSupply);
+    multiplier = (inputTotalSupply.mul(DECI)).div(_totalSupply);
     emit ChangeMultiplier(multiplier);
   }
 
