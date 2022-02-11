@@ -82,9 +82,9 @@ contract FlexUSDV2 is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   view
   returns(uint256) {
     uint256 externalAmt;
-    uint256 maxapproval = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
-    maxapproval = maxapproval.div(multiplier).mul(DECI);
-    if (_allowances[owner][spender] >= maxapproval) {
+    uint256 maxApproval = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
+    maxApproval = maxApproval.div(multiplier).mul(DECI);
+    if (_allowances[owner][spender] >= maxApproval) {
       externalAmt = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
     } else {
       externalAmt = (_allowances[owner][spender]).mul(multiplier).div(DECI);
@@ -253,17 +253,17 @@ contract FlexUSDV2 is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     require(owner != address(0), "ERC20: approve from the zero address");
     require(spender != address(0), "ERC20: approve to the zero address");
     uint256 internalAmt;
-    uint256 max_uint = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
-    uint256 maxapproval = max_uint.div(multiplier).mul(DECI);
-    if (externalAmt <= max_uint.div(DECI))
+    uint256 maxUInt = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
+    uint256 maxApproval = maxUInt.div(multiplier).mul(DECI);
+    if (externalAmt <= maxUInt.div(DECI))
     {
       internalAmt = externalAmt.mul(DECI).div(multiplier);
-      if (internalAmt > maxapproval)
+      if (internalAmt > maxApproval)
       {
-        internalAmt = maxapproval;
+        internalAmt = maxApproval;
       }
     } else {
-      internalAmt = maxapproval;
+      internalAmt = maxApproval;
     }
     _allowances[owner][spender] = internalAmt;
     emit Approval(owner, spender, externalAmt);
