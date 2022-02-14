@@ -82,8 +82,8 @@ def test_storage(deploy_fusd: FlexUSD, wrap_flex_proxy: FlexUSD, admin: Account,
   flex_proxy: FlexUSD = wrap_flex_proxy
   fusd.mint(alice, 1000, {'from': admin})
   flex_proxy.mint(bob, 2000, {'from': admin})
-  fusd.balanceOf(alice) != flex_proxy.balanceOf(alice)
-  fusd.balanceOf(bob) != flex_proxy.balanceOf(bob)
+  assert fusd.balanceOf(alice) != flex_proxy.balanceOf(alice)
+  assert fusd.balanceOf(bob) != flex_proxy.balanceOf(bob)
 
 def test_upgrade_to_zero(wrap_flex_proxy: FlexUSD, admin: Account):
   print(f'{ BLUE }Upgrade Test #1: Upgrade to zero address{ NFMT }')
@@ -104,11 +104,18 @@ def test_upgrade_to_eoa(wrap_flex_proxy: FlexUSD, admin: Account, user_accounts:
     flex_proxy.updateCode(target, {'from': admin})
 
 def test_upgrade_to_same_impl(wrap_flex_proxy: FlexUSD, deploy_fusd: FlexUSD, admin: Account, user_accounts: List[Account]):
+  alice: Account = user_accounts[0]
   print(f'{ BLUE }Upgrade Test #3: Upgrade to the same logic{ NFMT }')
   flex_proxy: FlexUSD   = wrap_flex_proxy
   fusd: FlexUSD         = deploy_fusd
-
+  
+  flex_proxy.mint(alice, 2000, {'from': admin})
+  print(f'Before upgrade, the Alice FlexUSD balance is {flex_proxy.balanceOf(alice)}')
+  print(f'{ BLUE }Upgrade...{ NFMT }')
   flex_proxy.updateCode(fusd, {'from': admin})
+  assert flex_proxy.balanceOf(alice) == 2000
+  print(f'After upgrade, the Alice FlexUSD balance is still {flex_proxy.balanceOf(alice)}')
+    
 
 def test_upgrade_from_non_owner(wrap_flex_proxy: FlexUSD, deploy_fusd: FlexUSD, user_accounts: List[Account]):
   print(f'{ BLUE }Upgrade Test #4: Upgrade from a Non-Owner Account{ NFMT }')
@@ -117,7 +124,7 @@ def test_upgrade_from_non_owner(wrap_flex_proxy: FlexUSD, deploy_fusd: FlexUSD, 
   flex_proxy: FlexUSD   = wrap_flex_proxy
   fusd: FlexUSD         = deploy_fusd
   ### Upgrade ###
-  with reverts("you are not the admin"):
+  with reverts("You are not the admin."):
     flex_proxy.updateCode(fusd, {'from': non_admin})
 
 def test_upgrade_successful_to_v2(deploy_proxy: Proxy, admin: Account, user_accounts: List[Account]):

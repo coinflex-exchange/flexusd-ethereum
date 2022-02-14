@@ -16,7 +16,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   event AdminChanged(address admin);
   event CodeUpdated(address indexed newCode);
 
-  function initialize(uint256 _totalsupply) public {
+  function initialize(uint256 _totalsupply) external {
     require(!initialized, "The library has already been initialized.");
     LibraryLock.initialize();
     admin = msg.sender;
@@ -34,41 +34,41 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   function setMultiplier(uint256 _multiplier)
   external
   onlyAdmin()
-  isPaused() {
+  isNotPaused() {
     require(
       _multiplier > multiplier,
-      "the multiplier should be greater than previous multiplier"
+      "The multiplier should be greater than previous multiplier."
     );
     multiplier = _multiplier;
     emit ChangeMultiplier(multiplier);
   }
 
-  function totalSupply() public override view returns(uint256) {
+  function totalSupply() public view override returns(uint256) {
     return _totalSupply.mul(multiplier).div(DECI);
   }
 
   function setTotalSupply(uint256 inputTotalSupply) external onlyAdmin() {
     require(
       inputTotalSupply > totalSupply(),
-      "the input total supply is not greater than present total supply"
+      "The input total supply is not greater than present total supply."
     );
     multiplier = (inputTotalSupply.mul(DECI)).div(_totalSupply);
     emit ChangeMultiplier(multiplier);
   }
 
-  function balanceOf(address account) public override view returns(uint256) {
+  function balanceOf(address account) external view override returns(uint256) {
     uint256 externalAmt;
     externalAmt = _balances[account].mul(multiplier).div(DECI);
     return externalAmt;
   }
 
   function transfer(address recipient, uint256 amount)
-  public
+  external
   virtual
   override
   notBlacklisted(msg.sender)
   notBlacklisted(recipient)
-  isPaused()
+  isNotPaused()
   returns(bool) {
     uint256 externalAmt = amount;
     _transfer(msg.sender, recipient, externalAmt);
@@ -77,9 +77,9 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
 
   function allowance(address owner, address spender)
   public
+  view
   virtual
   override
-  view
   returns(uint256) {
     uint256 externalAmt;
     uint256 maxApproval = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
@@ -94,12 +94,12 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   }
 
   function approve(address spender, uint256 amount)
-  public
+  external
   virtual
   override
   notBlacklisted(spender)
   notBlacklisted(msg.sender)
-  isPaused()
+  isNotPaused()
   returns(bool) {
     uint256 externalAmt = amount;
     _approve(msg.sender, spender, externalAmt);
@@ -118,10 +118,10 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
    *
    * - `spender` cannot be the zero address.
    */
-  function increaseAllowance(address spender, uint256 addedValue) public
+  function increaseAllowance(address spender, uint256 addedValue) external
   notBlacklisted(spender)
   notBlacklisted(msg.sender)
-  isPaused()
+  isNotPaused()
   returns(bool) {
     uint256 externalAmt = allowance(_msgSender(), spender);
     _approve(_msgSender(), spender, externalAmt.add(addedValue));
@@ -142,13 +142,13 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
    * - `spender` must have allowance for the caller of at least
    * `subtractedValue`.
    */
-  function decreaseAllowance(address spender, uint256 subtractedValue) public
+  function decreaseAllowance(address spender, uint256 subtractedValue) external
   notBlacklisted(spender)
   notBlacklisted(msg.sender)
-  isPaused()
+  isNotPaused()
   returns(bool) {
     uint256 externalAmt = allowance(_msgSender(), spender);
-    _approve(_msgSender(), spender, externalAmt.sub(subtractedValue, "ERC20: decreased allowance below zero"));
+    _approve(_msgSender(), spender, externalAmt.sub(subtractedValue, "ERC20: decreased allowance below zero."));
     return true;
   }
 
@@ -157,13 +157,13 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     address recipient,
     uint256 amount
   )
-  public
+  external
   virtual
   override
   notBlacklisted(sender)
   notBlacklisted(msg.sender)
   notBlacklisted(recipient)
-  isPaused()
+  isNotPaused()
   returns(bool) {
     uint256 externalAmt = allowance(sender, _msgSender());
     _transfer(sender, recipient, amount);
@@ -172,7 +172,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
       _msgSender(),
       externalAmt.sub(
         amount,
-        "ERC20: transfer amount exceeds allowance"
+        "ERC20: transfer amount exceeds allowance."
       )
     );
     return true;
@@ -183,22 +183,22 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     address recipient,
     uint256 externalAmt
   ) internal virtual {
-    require(sender != address(0), "ERC20: transfer from the zero address");
-    require(recipient != address(0), "ERC20: transfer to the zero address");
+    require(sender != address(0), "ERC20: transfer from the zero address.");
+    require(recipient != address(0), "ERC20: transfer to the zero address.");
     uint256 internalAmt = externalAmt.mul(DECI).div(multiplier);
     _balances[sender] = _balances[sender].sub(
       internalAmt,
-      "ERC20: transfer internalAmt exceeds balance"
+      "ERC20: transfer internalAmt exceeds balance."
     );
     _balances[recipient] = _balances[recipient].add(internalAmt);
     emit Transfer(sender, recipient, externalAmt);
   }
 
   function mint(address mintTo, uint256 amount)
-  public
+  external
   virtual
   onlyAdmin()
-  isPaused()
+  isNotPaused()
   returns(bool) {
     uint256 externalAmt = amount;
     uint256 internalAmt = externalAmt.mul(DECI).div(multiplier);
@@ -211,17 +211,17 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     uint256 internalAmt,
     uint256 externalAmt
   ) internal virtual {
-    require(account != address(0), "ERC20: mint to the zero address");
+    require(account != address(0), "ERC20: mint to the zero address.");
     _totalSupply = _totalSupply.add(internalAmt);
     _balances[account] = _balances[account].add(internalAmt);
     emit Transfer(address(0), account, externalAmt);
   }
 
   function burn(address burnFrom, uint256 amount)
-  public
+  external
   virtual
   onlyAdmin()
-  isPaused()
+  isNotPaused()
   returns(bool) {
     uint256 internalAmt;
     uint256 externalAmt = amount;
@@ -235,11 +235,11 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     uint256 internalAmt,
     uint256 externalAmt
   ) internal virtual {
-    require(account != address(0), "ERC20: burn from the zero address");
+    require(account != address(0), "ERC20: burn from the zero address.");
 
     _balances[account] = _balances[account].sub(
       internalAmt,
-      "ERC20: burn internaAmt exceeds balance"
+      "ERC20: burn internaAmt exceeds balance."
     );
     _totalSupply = _totalSupply.sub(internalAmt);
     emit Transfer(account, address(0), externalAmt);
@@ -250,8 +250,8 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     address spender,
     uint256 externalAmt
   ) internal virtual {
-    require(owner != address(0), "ERC20: approve from the zero address");
-    require(spender != address(0), "ERC20: approve to the zero address");
+    require(owner != address(0), "ERC20: approve from the zero address.");
+    require(spender != address(0), "ERC20: approve to the zero address.");
     uint256 internalAmt;
     uint256 maxUInt = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
     uint256 maxApproval = maxUInt.div(multiplier).mul(DECI);
@@ -269,8 +269,8 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     emit Approval(owner, spender, externalAmt);
   }
 
-  function transferOwnership(address account) public onlyAdmin() {
-    require(account != address(0), "new owner account cannot be zero address");
+  function transferOwnership(address account) external onlyAdmin() {
+    require(account != address(0), "New owner account cannot be zero address.");
     admin = account;
     emit AdminChanged(admin);
   }
@@ -285,13 +285,13 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
 
   // pause unpause
 
-  modifier isPaused() {
-    require(!getPause, "the contract is paused");
+  modifier isNotPaused() {
+    require(!getPause, "The contract is paused.");
     _;
   }
 
   modifier onlyAdmin() {
-    require(msg.sender == admin, "you are not the admin");
+    require(msg.sender == admin, "You are not the admin.");
     _;
   }
   
@@ -306,7 +306,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   }
 
   modifier notBlacklisted(address account) {
-    require(!blacklist[account], "account is blacklisted");
+    require(!blacklist[account], "Account is blacklisted.");
     _;
   }
 }

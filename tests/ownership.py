@@ -59,7 +59,7 @@ def test_pause(admin: Account, wrap_flex_proxy: FlexUSD):
     revert = True
     revert_msg = err.message
   assert revert     == True
-  assert revert_msg == 'VM Exception while processing transaction: revert the contract is paused'
+  assert revert_msg == 'VM Exception while processing transaction: revert The contract is paused'
 
 def test_failed_mint(user_accounts: List[Account], wrap_flex_proxy: FlexUSD):
   print(f'{ BLUE }Ownership Test #4: Failed Minting test.{ NFMT }')
@@ -76,7 +76,7 @@ def test_failed_mint(user_accounts: List[Account], wrap_flex_proxy: FlexUSD):
     revert = True
     revert_msg = err.message
   assert revert     == True
-  assert revert_msg == 'VM Exception while processing transaction: revert you are not the admin'
+  assert revert_msg == 'VM Exception while processing transaction: revert You are not the admin'
   ts_unchanged: Decimal  = flex_usd.totalSupply()
   assert total_supply == ts_unchanged
   print(f'Total Supply (Unchanged): { ts_unchanged })')
@@ -96,7 +96,7 @@ def test_failed_burn(user_accounts: List[Account], wrap_flex_proxy: FlexUSD):
     revert = True
     revert_msg = err.message
   assert revert     == True
-  assert revert_msg == 'VM Exception while processing transaction: revert you are not the admin'
+  assert revert_msg == 'VM Exception while processing transaction: revert You are not the admin'
   ts_unchanged: Decimal  = flex_usd.totalSupply()
   assert total_supply == ts_unchanged
   print(f'Total Supply (Unchanged): { ts_unchanged })')
@@ -112,7 +112,7 @@ def test_failed_pause(user_accounts: List[Account], wrap_flex_proxy: FlexUSD):
     revert     = True
     revert_msg = err.message
   assert revert     == True
-  assert revert_msg == 'VM Exception while processing transaction: revert you are not the admin'
+  assert revert_msg == 'VM Exception while processing transaction: revert You are not the admin'
 
 def test_transfer_ownership(admin: Account, user_accounts: List[Account], wrap_flex_proxy: FlexUSD):
   print(f'{ BLUE }Ownership Test #7: Transfer Ownership test.{ NFMT }')
@@ -131,7 +131,7 @@ def test_transfer_ownership(admin: Account, user_accounts: List[Account], wrap_f
     revert     = True
     revert_msg = err.message
   assert revert     == True
-  assert revert_msg == 'VM Exception while processing transaction: revert you are not the admin'
+  assert revert_msg == 'VM Exception while processing transaction: revert You are not the admin'
 
 def test_transfer_ownership_failed(user_accounts: List[Account], wrap_flex_proxy: FlexUSD):
   print(f'{ BLUE }Ownership Test #8: Transfer Ownership test from non-admin.{ NFMT }')
@@ -144,7 +144,7 @@ def test_transfer_ownership_failed(user_accounts: List[Account], wrap_flex_proxy
     revert     = True
     revert_msg = err.message
   assert revert     == True
-  assert revert_msg == 'VM Exception while processing transaction: revert you are not the admin'
+  assert revert_msg == 'VM Exception while processing transaction: revert You are not the admin'
 
 def test_transfer_ownership_then_failed_mint(admin: Account, user_accounts: List[Account], wrap_flex_proxy: FlexUSD):
   print(f'{ BLUE }Ownership Test #9: Transfer Ownership test and then failed Minting.{ NFMT }')
@@ -167,7 +167,7 @@ def test_transfer_ownership_then_failed_mint(admin: Account, user_accounts: List
     revert = True
     revert_msg = err.message
   assert revert     == True
-  assert revert_msg == 'VM Exception while processing transaction: revert you are not the admin'
+  assert revert_msg == 'VM Exception while processing transaction: revert You are not the admin'
   ### Assert Total Supply Unchanged ###
   ts_unchanged: Decimal = flex_usd.totalSupply()
   assert total_supply == ts_unchanged
@@ -194,7 +194,7 @@ def test_transfer_ownership_then_failed_burn(admin: Account, user_accounts: List
     revert = True
     revert_msg = err.message
   assert revert     == True
-  assert revert_msg == 'VM Exception while processing transaction: revert you are not the admin'
+  assert revert_msg == 'VM Exception while processing transaction: revert You are not the admin'
   ### Assert Total Supply Unchanged ###
   ts_unchanged: Decimal = flex_usd.totalSupply()
   assert total_supply == ts_unchanged
@@ -217,4 +217,4 @@ def test_transfer_ownership_then_failed_pause(admin: Account, user_accounts: Lis
     revert     = True
     revert_msg = err.message
   assert revert     == True
-  assert revert_msg == 'VM Exception while processing transaction: revert you are not the admin'
+  assert revert_msg == 'VM Exception while processing transaction: revert You are not the admin'

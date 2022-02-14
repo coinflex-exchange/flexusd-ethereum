@@ -51,7 +51,7 @@ def test_transfer_while_blacklisted(admin: Account, user_accounts: List[Account]
     revert = True
     revert_msg = err.message
   assert revert                        == True
-  assert revert_msg                    == 'VM Exception while processing transaction: revert account is blacklisted'
+  assert revert_msg                    == 'VM Exception while processing transaction: revert Account is blacklisted'
   assert flex_usd.balanceOf(from_addr) == amount_wei # Balance Unchanged
 
 def test_transfer_after_unblacklisted(admin: Account, user_accounts: List[Account], wrap_flex_proxy: FlexUSD):
