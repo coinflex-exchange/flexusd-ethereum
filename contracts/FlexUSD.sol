@@ -43,7 +43,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     emit ChangeMultiplier(multiplier);
   }
 
-  function totalSupply() public view override returns(uint256) {
+  function totalSupply() public view override returns (uint256) {
     return _totalSupply.mul(multiplier).div(DECI);
   }
 
@@ -56,7 +56,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     emit ChangeMultiplier(multiplier);
   }
 
-  function balanceOf(address account) external view override returns(uint256) {
+  function balanceOf(address account) external view override returns (uint256) {
     uint256 externalAmt;
     externalAmt = _balances[account].mul(multiplier).div(DECI);
     return externalAmt;
@@ -69,7 +69,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   notBlacklisted(msg.sender)
   notBlacklisted(recipient)
   isNotPaused()
-  returns(bool) {
+  returns (bool) {
     uint256 externalAmt = amount;
     _transfer(msg.sender, recipient, externalAmt);
     return true;
@@ -80,7 +80,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   view
   virtual
   override
-  returns(uint256) {
+  returns (uint256) {
     uint256 externalAmt;
     uint256 maxApproval = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
     maxApproval = maxApproval.div(multiplier).mul(DECI);
@@ -100,7 +100,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   notBlacklisted(spender)
   notBlacklisted(msg.sender)
   isNotPaused()
-  returns(bool) {
+  returns (bool) {
     uint256 externalAmt = amount;
     _approve(msg.sender, spender, externalAmt);
     return true;
@@ -122,7 +122,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   notBlacklisted(spender)
   notBlacklisted(msg.sender)
   isNotPaused()
-  returns(bool) {
+  returns (bool) {
     uint256 externalAmt = allowance(_msgSender(), spender);
     _approve(_msgSender(), spender, externalAmt.add(addedValue));
     return true;
@@ -146,7 +146,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   notBlacklisted(spender)
   notBlacklisted(msg.sender)
   isNotPaused()
-  returns(bool) {
+  returns (bool) {
     uint256 externalAmt = allowance(_msgSender(), spender);
     _approve(_msgSender(), spender, externalAmt.sub(subtractedValue, "ERC20: decreased allowance below zero."));
     return true;
@@ -164,7 +164,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   notBlacklisted(msg.sender)
   notBlacklisted(recipient)
   isNotPaused()
-  returns(bool) {
+  returns (bool) {
     uint256 externalAmt = allowance(sender, _msgSender());
     _transfer(sender, recipient, amount);
     _approve(
@@ -199,7 +199,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   virtual
   onlyAdmin()
   isNotPaused()
-  returns(bool) {
+  returns (bool) {
     uint256 externalAmt = amount;
     uint256 internalAmt = externalAmt.mul(DECI).div(multiplier);
     _mint(mintTo, internalAmt, externalAmt);
@@ -222,7 +222,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
   virtual
   onlyAdmin()
   isNotPaused()
-  returns(bool) {
+  returns (bool) {
     uint256 internalAmt;
     uint256 externalAmt = amount;
     internalAmt = externalAmt.mul(DECI).div(multiplier);
@@ -255,8 +255,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     uint256 internalAmt;
     uint256 maxUInt = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
     uint256 maxApproval = maxUInt.div(multiplier).mul(DECI);
-    if (externalAmt <= maxUInt.div(DECI))
-    {
+    if (externalAmt <= maxUInt.div(DECI)) {
       internalAmt = externalAmt.mul(DECI).div(multiplier);
       if (internalAmt > maxApproval)
       {
