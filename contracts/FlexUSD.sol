@@ -104,10 +104,10 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     returns (uint256)
   {
     uint256 externalAmt;
-    uint256 maxApproval = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
+    uint256 maxApproval = type(uint256).max;
     maxApproval = maxApproval.div(multiplier).mul(DECI);
     if (_allowances[owner][spender] >= maxApproval) {
-      externalAmt = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
+      externalAmt = type(uint256).max;
     } else {
       externalAmt = (_allowances[owner][spender]).mul(multiplier).div(DECI);
     }
@@ -295,7 +295,7 @@ contract FlexUSD is FlexUSDStorage, Context, IERC20, Proxiable, LibraryLock {
     require(owner != address(0), "ERC20: approve from the zero address.");
     require(spender != address(0), "ERC20: approve to the zero address.");
     uint256 internalAmt;
-    uint256 maxUInt = 115792089237316195423570985008687907853269984665640564039457584007913129639935;
+    uint256 maxUInt = type(uint256).max;
     uint256 maxApproval = maxUInt.div(multiplier).mul(DECI);
     if (externalAmt <= maxUInt.div(DECI)) {
       internalAmt = externalAmt.mul(DECI).div(multiplier);
