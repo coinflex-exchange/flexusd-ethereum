@@ -8,6 +8,7 @@ reports/
 .DS_Store
 # Ignore generated YAML files
 **/*.yml
+!brownie-config.yml
 # Ignore workspace settings
 .vscode
 .idea
