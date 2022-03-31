@@ -82,3 +82,11 @@ To publish sourcecode for verification on Chain Explorer, ie. etherscan, you mus
 ```bash
 brownie run flatten
 ```
+
+## Deployed Contracts Addresses 
+
+### Production contracts deployed on Ethereum Mainnet
+
+- Proxy (proxy contract): [0xa774FFB4AF6B0A91331C084E1aebAE6Ad535e6F3](https://etherscan.io/address/0xa774FFB4AF6B0A91331C084E1aebAE6Ad535e6F3)
+
+- FlexUSD (logic contract): [0xb961Af52192D358e2700BD9c14A5ABEd5f37a201](https://etherscan.io/address/0xb961af52192d358e2700bd9c14a5abed5f37a201)
